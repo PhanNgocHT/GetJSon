@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<Products> productList;
+    private List<Products> productList;
     private ProductAdapter productAdapter;
     String TAG = MainActivity.class.getSimpleName();
     String URL_GET_PRODUCT = "http://dev.androidcoban.com/blog/";
@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         btnGetData=findViewById(R.id.btn_getdata);
         recyclerView=findViewById(R.id.recycler_view);
-        addControl();
         btnGetData.setOnClickListener(this);
     }
 
@@ -47,13 +46,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         // Create 2 col
         mLayoutManager = new GridLayoutManager(MainActivity.this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        productList = new ArrayList<>();
+     //   productList = new ArrayList<>();
         productAdapter = new ProductAdapter(productList, MainActivity.this);
         recyclerView.setAdapter(productAdapter);
+        recyclerView.setLayoutManager(mLayoutManager);
     }
 
     private void getAllProduct() {
+        Log.e(TAG, "getAllProduct: ");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL_GET_PRODUCT)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -64,12 +64,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
-                List<Products> productsList = response.body();
-                for (int i = 0; i<productsList.size() ; i++) {
-                    productsList.add(productsList.get(i));
-                    Log.d(TAG, "onResponse" + productsList.get(i).toString());
+             //   List<Products>
+                productList = response.body();
+                for (int i = 0; i<productList.size() ; i++) {
+                    productList.add(productList.get(i));
+                    Log.e(TAG, "onResponse" + productList.get(i).getProductName());
                 }
-                productAdapter.notifyDataSetChanged();
+                addControl();
             }
 
             @Override
@@ -83,8 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_getdata:
+                Log.d(TAG, "onClick: ");
                 getAllProduct();
-                productAdapter.notifyDataSetChanged();
+             //   productAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
