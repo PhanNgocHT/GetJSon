@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GetJSon</string>
+    <string name="btnGet">Get Data</string>
+</resources>
