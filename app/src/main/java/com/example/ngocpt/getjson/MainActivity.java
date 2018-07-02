@@ -1,5 +1,6 @@
 package com.example.ngocpt.getjson;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.ngocpt.getjson.adapter.ProductAdapter;
 import com.example.ngocpt.getjson.model.Products;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getAllProduct() {
         Log.e(TAG, "getAllProduct: ");
+        productList = new ArrayList<>();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL_GET_PRODUCT)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -64,11 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
-             //   List<Products>
-                productList = response.body();
-                for (int i = 0; i<productList.size() ; i++) {
-                    productList.add(productList.get(i));
-                    Log.e(TAG, "onResponse" + productList.get(i).getProductName());
+                List<Products> productsList = response.body();
+                for (int i = 0; i<productsList.size() ; i++) {
+                    productList.add(productsList.get(i));
+                    Log.e(TAG, "onResponse:" + productList.get(i).getProductName());
                 }
                 addControl();
             }
@@ -84,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_getdata:
-                Log.d(TAG, "onClick: ");
                 getAllProduct();
-             //   productAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
